@@ -10,10 +10,12 @@ use IO::Handle;
 require URI::Find;
 
 use vars qw($VERSION %IRSSI);
-use vars qw(@uris @observedChans $logPath $fileHandle $logEntireMessage);
+use vars qw(@uris @observedChans $logPath $fileHandle $logEntireMessage $timezone);
 
 $logPath = "/home/pi/.irssi/archiveurls.log";
 $logEntireMessage = 1;
+$timezone = "Europe/Rome";
+# time zone ignored due to a IRSSI bug (https://github.com/irssi/irssi/issues/132)
 @observedChans = ("#openbsd"); 
 
 $VERSION = "0.1";
@@ -44,7 +46,7 @@ sub closeFile {
 sub parseMessage {
 	my ($server, $data, $nick, $target) = @_;
 	if (!@observedChans || (grep { $target eq $_} @observedChans)) { 
-		my $dt = DateTime->now;
+		my $dt = DateTime->now; #( time_zone => $timezone );
 		my $timeStamp = join(' ', $dt->ymd, $dt->hms);
 		my $messageToParse = $data;
 		@uris = ();
@@ -55,7 +57,6 @@ sub parseMessage {
 			} else {
 				for (@uris) {
 					my $uri = $_;
-					Irssi::print($uri);
 					logURL($timeStamp, $server, $target, $nick, $uri);
 				}
 			}
