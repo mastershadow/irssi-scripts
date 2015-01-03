@@ -23,7 +23,7 @@ $VERSION = "0.1";
         name        => "archive-urls",
         description => "Archive URLs into a plain text file",
         license     => "MIT",
-        url         => "https://github.com/mastershadow/archive-urls",
+        url         => "https://github.com/mastershadow/irssi-scripts",
     );
 
 @uris = ();
